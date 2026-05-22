@@ -1,0 +1,44 @@
+# 日志文件
+*.log
+
+# Cookie文件
+cookies.txt
+
+# 配置和数据文件
+settings.json
+download_history.json
+favorites.json
+
+# 构建产物
+dist/
+build/
+*.spec
+
+# Python缓存
+__pycache__/
+*.pyc
+*.pyo
+.Python
+
+# 临时文件
+*.tmp
+*.bak
+*.swp
+*.vbs
+
+# IDE配置
+.vscode/
+.idea/
+*.iml
+
+# 操作系统文件
+Thumbs.db
+.DS_Store
+
+# 图标生成文件（可选保留）
+icon.png
+
+# 启动脚本（可选保留）
+启动下载器.bat
+启动下载器.vbs
+打包.bat
