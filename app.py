@@ -350,72 +350,6 @@ def extract_play_url(video_data):
     return None
 
 
-def get_user_videos_from_api(sec_uid, cursor=0):
-    params = {
-        "sec_user_id": sec_uid,
-        "count": 20,
-        "max_cursor": cursor,
-        "aid": "6383",
-        "dytk": "",
-        "device_platform": "webapp",
-    }
-    try:
-        data = make_request(DOUYIN_AWEME_LIST_API, params=params)
-    except Exception:
-        try:
-            data = make_request(DOUYIN_AWEME_LIST_API, params=params,
-                              extra_headers={"Accept": "*/*"})
-        except Exception as e2:
-            raise Exception("API 请求失败: {}".format(str(e2)))
-
-    if data.get("status_code") != 0:
-        msg = data.get("status_msg", "未知错误")
-        raise Exception("API 返回错误: {} (code: {})".format(msg, data.get("status_code")))
-
-    aweme_list = data.get("aweme_list", [])
-    has_more = data.get("has_more", 0) == 1
-    next_cursor = data.get("max_cursor", 0)
-
-    videos = []
-    history = load_history()
-
-    for item in aweme_list:
-        try:
-            aweme_id = str(item.get("aweme_id", item.get("id", "")))
-            if not aweme_id:
-                continue
-            desc = item.get("desc", "") or "无标题"
-            if len(desc) > 80:
-                desc = desc[:80] + "..."
-            video = item.get("video", {})
-            cover = ""
-            if video.get("cover") and video["cover"].get("url_list"):
-                cover = video["cover"]["url_list"][0]
-            if not cover and video.get("origin_cover") and video["origin_cover"].get("url_list"):
-                cover = video["origin_cover"]["url_list"][0]
-            duration = video.get("duration", 0)
-            duration_str = "{:02d}:{:02d}".format(int(duration) // 1000 // 60, int(duration) // 1000 % 60) if duration else ""
-            video_download_url = extract_best_video_url(video)
-            video_play_url = extract_play_url(video)
-            video_page_url = "https://www.douyin.com/video/{}".format(aweme_id)
-            videos.append({
-                "id": aweme_id,
-                "title": desc,
-                "thumbnail": cover,
-                "url": video_page_url,
-                "download_url": video_download_url or "",
-                "play_url": video_play_url or "",
-                "duration": duration_str,
-                "downloaded": aweme_id in history,
-                "download_time": history.get(aweme_id, {}).get("download_time", ""),
-                "local_path": history.get(aweme_id, {}).get("local_path", ""),
-            })
-        except Exception as e:
-            logger.warning("Failed to parse video item: {}".format(e))
-            continue
-    return videos, has_more, next_cursor
-
-
 def get_user_videos(profile_url):
     logger.info("Fetching user videos from: {}".format(profile_url))
     if "v.douyin.com" in profile_url:
@@ -455,7 +389,7 @@ def get_user_videos_from_api(url_or_sec_uid, cursor=0):
     
     params = {
         "sec_user_id": sec_uid,
-        "count": 20,
+        "count": 30,
         "max_cursor": cursor,
         "aid": "6383",
         "dytk": "",
