@@ -31,10 +31,10 @@ LOG_FILE = BASE_DIR / "downloader.log"
 def setup_logging():
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
-    
+
     # 文件日志
     file_handler = RotatingFileHandler(
-        LOG_FILE, 
+        LOG_FILE,
         maxBytes=5*1024*1024,  # 5MB
         backupCount=3,
         encoding='utf-8'
@@ -46,13 +46,13 @@ def setup_logging():
     )
     file_handler.setFormatter(file_formatter)
     logger.addHandler(file_handler)
-    
+
     # 同时输出到控制台
     console_handler = logging.StreamHandler()
     console_handler.setLevel(logging.INFO)
     console_handler.setFormatter(file_formatter)
     logger.addHandler(console_handler)
-    
+
     return logger
 
 app = Flask(__name__)
@@ -84,12 +84,10 @@ def test_dir_write_permission(dir_path):
     try:
         import os
         import random
-        
-        # 生成唯一的测试文件名
+
         test_name = "perm_test_{}_{}.tmp".format(os.getpid(), random.randint(10000, 99999))
         test_file = dir_path / test_name
-        
-        # 尝试创建文件
+
         try:
             with open(test_file, 'wb') as f:
                 f.write(b'permission_test')
@@ -97,20 +95,17 @@ def test_dir_write_permission(dir_path):
             return False, "无法创建文件，权限被拒绝"
         except Exception as e:
             return False, "无法创建文件: {}".format(str(e))
-        
-        # 尝试删除文件
+
         try:
             os.unlink(test_file)
             return True, None
         except Exception as e:
-            # 文件创建成功但删除失败，也算有权限
-            # 尝试其他方式删除
             try:
                 Path(test_file).unlink()
                 return True, None
             except:
-                return True, None  # 忽略删除失败
-        
+                return True, None
+
     except Exception as e:
         return False, "权限测试失败: {}".format(str(e))
 
@@ -122,13 +117,11 @@ def get_download_dir():
     if custom_dir:
         p = Path(custom_dir)
         if p.exists() and p.is_dir():
-            # 测试写入权限
             can_write, error_msg = test_dir_write_permission(p)
             if can_write:
                 return p.resolve()
             else:
                 logger.warning("Custom dir has no write permission: {}, error: {}".format(custom_dir, error_msg))
-    # 返回默认目录
     DEFAULT_DOWNLOAD_DIR.mkdir(exist_ok=True)
     return DEFAULT_DOWNLOAD_DIR
 
@@ -136,6 +129,7 @@ def get_download_dir():
 # 下载状态
 download_tasks = {}
 lock = threading.Lock()
+download_semaphore = threading.Semaphore(5)
 
 # 抖音 API
 DOUYIN_AWEME_LIST_API = "https://www.douyin.com/aweme/v1/web/aweme/post/"
@@ -186,13 +180,11 @@ def get_downloaded_path(video_id):
 
 @app.route("/api/check_cookie", methods=["GET"])
 def check_cookie():
-    """检查Cookie文件是否存在"""
     return jsonify({"exists": COOKIE_FILE.exists() and COOKIE_FILE.stat().st_size > 0})
 
 
 @app.route("/api/save_cookie", methods=["POST"])
 def save_cookie():
-    """保存Cookie到文件"""
     try:
         data = request.get_json()
         content = data.get("content", "").strip()
@@ -329,7 +321,6 @@ def extract_best_video_url(video_data):
 
 
 def extract_play_url(video_data):
-    """提取带水印的可播放地址（用于预览）"""
     play_addr = video_data.get("play_addr", {})
     url_list = play_addr.get("url_list", [])
     if url_list:
@@ -377,7 +368,6 @@ def get_user_videos(profile_url):
 
 
 def get_user_videos_from_api(url_or_sec_uid, cursor=0):
-    """支持直接传入URL或sec_uid"""
     if "douyin.com" in url_or_sec_uid:
         if "v.douyin.com" in url_or_sec_uid:
             url_or_sec_uid = resolve_share_url(url_or_sec_uid)
@@ -386,7 +376,7 @@ def get_user_videos_from_api(url_or_sec_uid, cursor=0):
             raise Exception("无法从链接中提取用户ID")
     else:
         sec_uid = url_or_sec_uid
-    
+
     params = {
         "sec_user_id": sec_uid,
         "count": 30,
@@ -503,18 +493,23 @@ def download_file(url, filepath, task_id):
 def download_video(video_id, video_title, download_url=None, video_page_url=None):
     task_id = "task_{}_{}".format(video_id, int(time.time()))
     with lock:
-        download_tasks[task_id] = {"status": "downloading", "progress": 0, "message": "准备下载...", "video_id": video_id, "video_path": None}
+        download_tasks[task_id] = {"status": "queued", "progress": 0, "message": "排队中... (最多同时下载5个)", "video_id": video_id, "video_path": None}
 
     def _download():
         import shutil
         import random
         import os
-        
+
         try:
+            download_semaphore.acquire()
+
+            with lock:
+                download_tasks[task_id]["status"] = "downloading"
+                download_tasks[task_id]["message"] = "准备下载..."
+
             download_dir = get_download_dir()
             logger.info("Download dir: {}".format(download_dir))
             logger.info("Dir exists: {}".format(download_dir.exists()))
-            logger.info("Dir is writable: checking...")
 
             if not download_dir.exists():
                 logger.error("Directory not found: {}".format(download_dir))
@@ -522,40 +517,24 @@ def download_video(video_id, video_title, download_url=None, video_page_url=None
                     download_tasks[task_id].update({"status": "error", "message": "下载目录不存在"})
                 return
 
-            # 测试目录是否可写
-            can_write, write_error = test_dir_write_permission(download_dir)
-            logger.info("Dir writable: {}, error: {}".format(can_write, write_error))
-            
-            if not can_write:
-                with lock:
-                    download_tasks[task_id].update({
-                        "status": "error", 
-                        "message": "无法写入目录！错误: {}".format(write_error)
-                    })
-                return
-
-            # 清理标题中的非法字符
             safe_title = re.sub(r'[<>:"/\\|?*\x00-\x1f]', '_', video_title)[:100]
             if not safe_title or safe_title == '_':
                 safe_title = 'video'
-            
-            # 生成唯一文件名，如果有重复则添加序号
+
             final_filepath = download_dir / "{}.mp4".format(safe_title)
             counter = 1
             while final_filepath.exists():
                 final_filepath = download_dir / "{}_{}.mp4".format(safe_title, counter)
                 counter += 1
-            
-            # 使用带随机后缀的临时文件到系统临时目录
+
             import tempfile
             system_temp = Path(tempfile.gettempdir())
             temp_suffix = random.randint(10000, 99999)
             temp_filepath = system_temp / "douyin_dl_{}_{}.mp4".format(video_id, temp_suffix)
-            
+
             logger.info("Final path: {}".format(final_filepath))
             logger.info("Temp path (system): {}".format(temp_filepath))
 
-            # 清理可能存在的临时文件
             if temp_filepath.exists():
                 try:
                     temp_filepath.unlink()
@@ -573,8 +552,7 @@ def download_video(video_id, video_title, download_url=None, video_page_url=None
                 return
 
             logger.info("Downloading: {}".format(video_title))
-            
-            # 下载到系统临时目录
+
             try:
                 downloaded = download_file(url, str(temp_filepath), task_id)
                 logger.info("Downloaded to temp, size: {} bytes".format(downloaded))
@@ -582,12 +560,11 @@ def download_video(video_id, video_title, download_url=None, video_page_url=None
                 logger.error("Download to temp failed: {}".format(dl_err))
                 with lock:
                     download_tasks[task_id].update({
-                        "status": "error", 
+                        "status": "error",
                         "message": "下载失败: {}".format(str(dl_err))
                     })
                 return
 
-            # 检查临时文件
             if not temp_filepath.exists() or temp_filepath.stat().st_size == 0:
                 logger.error("Temp file invalid or empty")
                 with lock:
@@ -596,7 +573,6 @@ def download_video(video_id, video_title, download_url=None, video_page_url=None
 
             logger.info("Temp file size: {} bytes".format(temp_filepath.stat().st_size))
 
-            # 将临时文件移动到目标目录
             try:
                 shutil.move(str(temp_filepath), str(final_filepath))
                 logger.info("Moved to final location successfully")
@@ -608,25 +584,23 @@ def download_video(video_id, video_title, download_url=None, video_page_url=None
                     logger.info("Copied to final location successfully")
                 except Exception as copy_err:
                     logger.error("Copy also failed: {}, keeping temp file".format(copy_err))
-                    # 使用临时文件作为最终文件
                     final_filepath = temp_filepath
 
-            # 验证最终文件
             if final_filepath.exists() and final_filepath.stat().st_size > 0:
                 logger.info("Final file verified, size: {} bytes".format(final_filepath.stat().st_size))
                 with lock:
                     download_tasks[task_id].update({
-                        "status": "completed", 
-                        "progress": 100, 
-                        "message": "下载完成！({:.1f}MB)".format(downloaded / 1024 / 1024), 
+                        "status": "completed",
+                        "progress": 100,
+                        "message": "下载完成！({:.1f}MB)".format(downloaded / 1024 / 1024),
                         "video_path": str(final_filepath)
                     })
                 history = load_history()
                 history[video_id] = {
-                    "title": video_title, 
-                    "url": video_page_url or "", 
-                    "local_path": str(final_filepath), 
-                    "download_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
+                    "title": video_title,
+                    "url": video_page_url or "",
+                    "local_path": str(final_filepath),
+                    "download_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                     "file_size": final_filepath.stat().st_size
                 }
                 save_history(history)
@@ -639,11 +613,13 @@ def download_video(video_id, video_title, download_url=None, video_page_url=None
                         pass
                 with lock:
                     download_tasks[task_id].update({"status": "error", "message": "下载失败，文件验证失败"})
-                    
+
         except Exception as e:
             logger.error("Download exception: {}".format(traceback.format_exc()))
             with lock:
                 download_tasks[task_id].update({"status": "error", "message": "下载失败: {}".format(str(e))})
+        finally:
+            download_semaphore.release()
 
     threading.Thread(target=_download, daemon=True).start()
     return task_id
@@ -661,33 +637,31 @@ def fetch_videos():
     data = request.get_json()
     url = data.get("url", "").strip()
     cursor = data.get("cursor", 0)
-    
+
     if not url:
         return jsonify({"success": False, "message": "请输入博主主页链接"})
     if "douyin.com" not in url:
         return jsonify({"success": False, "message": "请输入有效的抖音链接"})
-    
+
     try:
-        # 第一次请求获取基本信息
         if cursor == 0:
             videos, has_more, next_cursor = get_user_videos_from_api(url)
             if not videos:
                 return jsonify({"success": False, "message": "未找到视频。可能原因:\n1. 链接格式不正确\n2. 需要设置 cookies.txt\n3. 该账号为私密账号"})
             return jsonify({
-                "success": True, 
-                "videos": videos, 
-                "total": -1,  # -1表示未知总数
-                "has_more": has_more, 
+                "success": True,
+                "videos": videos,
+                "total": -1,
+                "has_more": has_more,
                 "cursor": next_cursor,
                 "downloaded_count": sum(1 for v in videos if v["downloaded"])
             })
         else:
-            # 增量加载更多
             videos, has_more, next_cursor = get_user_videos_from_api(url, cursor=cursor)
             return jsonify({
-                "success": True, 
-                "videos": videos, 
-                "has_more": has_more, 
+                "success": True,
+                "videos": videos,
+                "has_more": has_more,
                 "cursor": next_cursor,
                 "downloaded_count": sum(1 for v in videos if v["downloaded"])
             })
@@ -804,15 +778,14 @@ def update_settings():
                     p.mkdir(parents=True, exist_ok=True)
                 except Exception as e:
                     return jsonify({"success": False, "message": "无法创建目录: {}".format(e)})
-            
-            # 检查目录是否有写入权限
+
             can_write, error_msg = test_dir_write_permission(p)
             if not can_write:
                 return jsonify({
-                    "success": False, 
+                    "success": False,
                     "message": "该目录没有写入权限！\n\n可能原因：\n1. 目录在系统保护区域（如桌面、文档）\n2. 需要管理员权限\n3. 目录被其他程序占用\n\n建议：\n- 使用程序目录下的文件夹\n- 或创建一个新文件夹（如 D:\\MyVideos）"
                 })
-            
+
             settings["download_dir"] = dir_path
         else:
             settings.pop("download_dir", None)
@@ -822,22 +795,21 @@ def update_settings():
 
 @app.route("/api/browse_folder", methods=["POST"])
 def browse_folder():
-    """打开Windows文件夹选择对话框"""
     try:
         import tkinter as tk
         from tkinter import filedialog
-        
+
         root = tk.Tk()
         root.withdraw()
         root.attributes('-topmost', True)
-        
+
         folder_path = filedialog.askdirectory(
             title="选择下载目录",
             initialdir=str(get_download_dir())
         )
-        
+
         root.destroy()
-        
+
         if folder_path:
             return jsonify({"success": True, "path": folder_path})
         else:
@@ -848,7 +820,6 @@ def browse_folder():
 
 @app.route("/api/open_downloads", methods=["POST"])
 def open_downloads():
-    """在资源管理器中打开下载目录（Windows 版本）"""
     try:
         path = str(get_download_dir())
         if not os.path.exists(path):
@@ -864,7 +835,6 @@ def serve_download(filename):
     return send_from_directory(str(get_download_dir()), filename)
 
 
-# 视频代理播放
 _video_url_cache = {}
 
 
@@ -903,7 +873,6 @@ def proxy_play(video_id):
 
 
 def open_browser():
-    """启动后自动打开浏览器"""
     time.sleep(1.5)
     try:
         url = "http://127.0.0.1:5001"
@@ -923,9 +892,5 @@ if __name__ == "__main__":
     logger.info("Open browser: http://127.0.0.1:5001")
     logger.info("Log file: {}".format(LOG_FILE))
     logger.info("=" * 50)
-    
-    # 启动浏览器
-    threading.Thread(target=open_browser, daemon=True).start()
-    
-    # 启动Flask
+
     app.run(host="0.0.0.0", port=5001, debug=False)

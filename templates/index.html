@@ -32,7 +32,6 @@
             min-height: 100vh;
             line-height: 1.6;
         }
-        /* 顶部导航 */
         .header {
             background: var(--bg-secondary);
             border-bottom: 1px solid rgba(255,255,255,0.06);
@@ -75,7 +74,6 @@
         .btn-ghost { background: none; color: var(--text-muted); padding: 6px 8px; }
         .btn-ghost:hover { color: var(--text-primary); }
 
-        /* 使用说明弹窗 */
         .tips-popup {
             display: none;
             position: fixed;
@@ -97,7 +95,6 @@
 
         .container { max-width: 100%; margin: 0 auto; padding: 16px 20px; }
 
-        /* 收藏栏 - 单行 */
         .favorites-bar {
             display: none;
             align-items: center;
@@ -163,12 +160,16 @@
         .fav-chip:hover .fav-chip-remove { opacity: 1; }
         .fav-chip-remove:hover { background: #ff4444; color: white; }
 
-        /* 输入区域 - 输入框占一半 */
         .input-section {
             display: flex;
             align-items: center;
             gap: 8px;
             margin-bottom: 12px;
+            position: sticky;
+            top: 50px;
+            background: var(--bg-primary);
+            padding: 8px 0;
+            z-index: 50;
         }
         .input-section input {
             width: 50%;
@@ -185,12 +186,10 @@
         .input-section input::placeholder { color: var(--text-muted); }
         .action-buttons { display: flex; gap: 6px; margin-left: auto; }
 
-        /* 统计栏 */
         .stats-bar { display: none; align-items: center; gap: 14px; margin-bottom: 10px; padding: 0 2px; font-size: 11px; color: var(--text-muted); }
         .stats-bar.active { display: flex; }
         .stats-bar strong { color: var(--text-primary); font-weight: 600; }
 
-        /* 视频网格 */
         .video-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -206,7 +205,7 @@
             position: relative;
         }
         .video-card:hover { background: var(--bg-card-hover); transform: translateY(-2px); box-shadow: var(--shadow); }
-        .video-card.selected { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), var(--shadow); }
+        .video-card.selected { border-color: #4CAF50 !important; border-width: 3px; box-shadow: 0 0 15px rgba(76, 175, 80, 0.5), var(--shadow); }
         .video-thumb { position: relative; width: 100%; padding-top: 133%; background: #111; overflow: hidden; }
         .video-thumb img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
         .video-thumb .duration { position: absolute; bottom: 4px; right: 4px; background: rgba(0,0,0,0.75); color: white; font-size: 9px; padding: 1px 4px; border-radius: 3px; }
@@ -248,7 +247,6 @@
         .video-title { font-size: 10px; color: var(--text-primary); line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 2px; }
         .video-meta { font-size: 9px; color: var(--text-muted); }
 
-        /* 加载动画 */
         .loading-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; }
         .loading-overlay.active { display: flex; }
         .loading-box { background: var(--bg-secondary); border-radius: 16px; padding: 32px 48px; text-align: center; border: 1px solid rgba(255,255,255,0.08); }
@@ -256,7 +254,6 @@
         @keyframes spin { to { transform: rotate(360deg); } }
         .loading-box p { color: var(--text-secondary); font-size: 14px; }
 
-        /* 下载进度面板 */
         .download-panel { display: none; position: fixed; bottom: 24px; right: 24px; width: 380px; max-height: 400px; background: var(--bg-secondary); border-radius: 16px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 8px 40px rgba(0,0,0,0.5); z-index: 200; overflow: hidden; }
         .download-panel.active { display: block; }
         .download-panel-header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: space-between; }
@@ -278,13 +275,11 @@
         .download-item-status.completed { color: var(--green); }
         .download-item-status.error { color: #ff4444; }
 
-        /* 空状态 */
         .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
         .empty-state .icon { font-size: 48px; margin-bottom: 12px; opacity: 0.3; }
         .empty-state h2 { font-size: 18px; color: var(--text-secondary); margin-bottom: 8px; font-weight: 500; }
         .empty-state p { font-size: 13px; }
 
-        /* 视频预览弹窗 */
         .video-preview-overlay {
             display: none;
             position: fixed;
@@ -340,7 +335,6 @@
             text-overflow: ellipsis;
             border-radius: 0 0 12px 12px;
         }
-        /* 设置弹窗 */
         .settings-overlay {
             display: none;
             position: fixed;
@@ -383,14 +377,12 @@
         .settings-hint { font-size: 11px; color: var(--text-muted); margin-bottom: 16px; }
         .settings-current { font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; word-break: break-all; }
 
-        /* Toast */
         .toast-container { position: fixed; top: 60px; right: 24px; z-index: 300; display: flex; flex-direction: column; gap: 8px; }
         .toast { background: var(--bg-secondary); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 20px; font-size: 13px; color: var(--text-primary); box-shadow: 0 4px 20px rgba(0,0,0,0.4); animation: slideIn 0.3s ease; max-width: 360px; }
         .toast.error { border-left: 3px solid #ff4444; }
         .toast.success { border-left: 3px solid var(--green); }
         @keyframes slideIn { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
-        /* 收藏弹窗 */
         .fav-modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 500; align-items: center; justify-content: center; }
         .fav-modal-overlay.active { display: flex; }
         .fav-modal { background: var(--bg-secondary); border-radius: 16px; padding: 24px; width: 360px; border: 1px solid rgba(255,255,255,0.08); }
@@ -426,7 +418,6 @@
         </div>
     </header>
 
-    <!-- 使用说明弹窗 -->
     <div class="tips-popup" id="tipsPopup">
         <h4>📋 使用说明</h4>
         <ul>
@@ -439,17 +430,14 @@
     </div>
 
     <div class="container">
-        <!-- 收藏栏 - 单行 -->
         <div class="favorites-bar" id="favoritesBar">
             <span class="fav-label">⭐ 收藏:</span>
             <div class="fav-scroll" id="favScroll"></div>
         </div>
 
-        <!-- 输入区域 + 操作按钮 一行 -->
         <div class="input-section">
             <input type="text" id="urlInput" placeholder="粘贴博主主页链接 https://www.douyin.com/user/..." onkeydown="if(event.key==='Enter') fetchVideos()">
             <button class="btn btn-primary" onclick="fetchVideos()">🔍 获取作品</button>
-            <!-- 收藏按钮 -->
             <button class="btn btn-yellow" onclick="showFavModal()">⭐ 收藏</button>
             <div class="action-buttons">
                 <button class="btn btn-secondary" onclick="selectAll()">全选</button>
@@ -461,17 +449,14 @@
             </div>
         </div>
 
-        <!-- 统计栏 -->
         <div class="stats-bar" id="statsBar">
             <span>共 <strong id="totalCount">0</strong> 个作品</span>
             <span>已下载 <strong id="downloadedCount">0</strong></span>
             <span>已选中 <strong id="selectedCount">0</strong></span>
         </div>
 
-        <!-- 视频网格 -->
         <div id="videoGrid" class="video-grid"></div>
 
-        <!-- 空状态 -->
         <div class="empty-state" id="emptyState">
             <div class="icon">🎬</div>
             <h2>粘贴博主主页链接开始</h2>
@@ -479,7 +464,6 @@
         </div>
     </div>
 
-    <!-- 加载遮罩 -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-box">
             <div class="spinner"></div>
@@ -487,13 +471,11 @@
         </div>
     </div>
 
-    <!-- 下载进度面板 -->
     <div class="download-panel" id="downloadPanel">
         <div class="download-panel-header">
             <h3>⬇ 下载进度</h3>
             <button class="btn btn-secondary btn-sm" onclick="closeDownloadPanel()">✕</button>
         </div>
-        <!-- 整体进度条 -->
         <div class="download-overall-progress" id="overallProgress">
             <div class="download-overall-bar">
                 <div class="download-overall-fill" id="overallFill" style="width: 0%"></div>
@@ -503,7 +485,6 @@
         <div class="download-panel-body" id="downloadPanelBody"></div>
     </div>
 
-    <!-- 收藏弹窗 -->
     <div class="fav-modal-overlay" id="favModal">
         <div class="fav-modal">
             <h3>⭐ 收藏博主</h3>
@@ -515,7 +496,6 @@
         </div>
     </div>
 
-    <!-- Cookie输入弹窗 -->
     <div class="fav-modal-overlay" id="cookieModal">
         <div class="fav-modal" style="width: 500px;">
             <h3>🔐 设置 Cookie</h3>
@@ -533,7 +513,6 @@
         </div>
     </div>
 
-    <!-- 设置弹窗 -->
     <div class="settings-overlay" id="settingsOverlay" onclick="closeSettings(event)">
         <div class="settings-box" onclick="event.stopPropagation()">
             <h3>⚙️ 设置</h3>
@@ -547,21 +526,19 @@
             <div class="settings-row">
                 <label>下载目录</label>
                 <input type="text" id="dirInput" placeholder="例如：D:\Downloads\抖音视频">
-                <button class="btn btn-secondary" onclick="browseFolder()">📂 浏览</button>
+                <button class="btn btn-secondary" onclick="browseFolder()">浏览</button>
             </div>
             <div class="settings-actions">
-                <button class="btn btn-secondary" onclick="resetDownloadDir()">恢复默认</button>
                 <button class="btn btn-secondary" onclick="closeSettings()">取消</button>
                 <button class="btn btn-primary" onclick="saveSettings()">保存</button>
             </div>
         </div>
     </div>
 
-    <!-- 视频预览弹窗 -->
-    <div class="video-preview-overlay" id="videoPreview" onclick="closePreview(event)">
-        <div class="video-preview-box" onclick="event.stopPropagation()">
+    <div class="video-preview-overlay" id="videoPreviewOverlay">
+        <div class="video-preview-box">
+            <video id="previewVideo" controls></video>
             <button class="video-preview-close" onclick="closePreview()">✕</button>
-            <video id="previewVideo" controls playsinline preload="metadata"></video>
             <div class="video-preview-title" id="previewTitle"></div>
         </div>
     </div>
@@ -576,7 +553,7 @@
         let activeTasks = {};
         let statusInterval = null;
         let favorites = [];
-        let totalDownloadCount = 0; // 当前批次总下载任务数
+        let totalDownloadCount = 0;
         let currentCursor = 0;
         let currentUrl = '';
         let hasMoreVideos = false;
@@ -587,7 +564,6 @@
             loadFavorites();
         });
 
-        // 点击页面其他地方关闭说明
         document.addEventListener('click', (e) => {
             const tips = document.getElementById('tipsPopup');
             if (tips.classList.contains('active') && !tips.contains(e.target) && !e.target.closest('.btn-ghost')) {
@@ -597,7 +573,6 @@
 
         function toggleTips() { document.getElementById('tipsPopup').classList.toggle('active'); }
 
-        // ============ 收藏 ============
         async function loadFavorites() {
             try {
                 const resp = await fetch('/api/favorites');
@@ -692,7 +667,6 @@
             } catch (e) {}
         }
 
-        // ============ API ============
         async function fetchVideos() {
             const url = document.getElementById('urlInput').value.trim();
             if (!url) { showToast('请输入博主主页链接', 'error'); return; }
@@ -711,16 +685,15 @@
                 const resp = await fetch('/api/fetch_videos', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url, cursor: 0 }) });
                 const data = await resp.json();
                 if (data.success) {
-                    allVideos = data.videos; 
+                    allVideos = data.videos;
                     selectedVideos.clear();
                     displayedCount = 0;
                     currentCursor = data.cursor;
                     currentUrl = url;
                     hasMoreVideos = data.has_more;
-                    renderVideos(true); // 重置并初始加载
+                    renderVideos(true);
                     updateStats();
-                    
-                    // 如果还有更多视频，显示提示
+
                     if (hasMoreVideos) {
                         showToast('成功获取 ' + data.videos.length + ' 个作品，滑动页面加载更多...', 'success');
                         setupScrollListener();
@@ -748,7 +721,7 @@
                 const scrollTop = window.scrollY || document.documentElement.scrollTop;
                 const windowHeight = window.innerHeight;
                 const docHeight = document.documentElement.scrollHeight;
-                
+
                 if (scrollTop + windowHeight >= docHeight - 800) {
                     loadMoreVideos();
                 }
@@ -758,177 +731,306 @@
 
         async function loadMoreVideos() {
             if (isLoadingMore || !hasMoreVideos || !currentUrl) return;
-            
+
             isLoadingMore = true;
             showLoading('正在加载更多视频...');
-            
+
             try {
-                const resp = await fetch('/api/fetch_videos', { 
-                    method: 'POST', 
-                    headers: { 'Content-Type': 'application/json' }, 
-                    body: JSON.stringify({ url: currentUrl, cursor: currentCursor }) 
+                const resp = await fetch('/api/fetch_videos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: currentUrl, cursor: currentCursor })
                 });
                 const data = await resp.json();
-                
-                if (data.success && data.videos.length > 0) {
+
+                if (data.success) {
                     allVideos = allVideos.concat(data.videos);
                     currentCursor = data.cursor;
                     hasMoreVideos = data.has_more;
-                    
-                    renderVideos(false); // 追加新视频
-                    
-                    if (hasMoreVideos) {
-                        showToast('已加载 ' + allVideos.length + ' 个作品，继续滑动加载更多...', 'success');
-                    } else {
+                    renderVideos(false);
+                    updateStats();
+
+                    if (!hasMoreVideos) {
                         showToast('已加载全部 ' + allVideos.length + ' 个作品', 'success');
-                        // 移除滚动监听
                         if (scrollListener) {
                             window.removeEventListener('scroll', scrollListener);
                             scrollListener = null;
                         }
                     }
-                    
-                    updateStats();
                 } else {
-                    hasMoreVideos = false;
-                    showToast('已加载全部 ' + allVideos.length + ' 个作品', 'success');
+                    showToast(data.message || '加载失败', 'error');
                 }
-            } catch (e) { 
-                showToast('加载失败: ' + e.message, 'error'); 
-            } finally { 
+            } catch (e) { showToast('加载失败: ' + e.message, 'error'); }
+            finally {
                 isLoadingMore = false;
                 hideLoading();
             }
         }
 
+        function renderVideos(reset) {
+            const grid = document.getElementById('videoGrid');
+            const empty = document.getElementById('emptyState');
+            const stats = document.getElementById('statsBar');
+
+            if (allVideos.length === 0) {
+                grid.innerHTML = '';
+                empty.style.display = 'block';
+                stats.classList.remove('active');
+                return;
+            }
+
+            empty.style.display = 'none';
+            stats.classList.add('active');
+
+            if (reset) {
+                displayedCount = 0;
+                grid.innerHTML = '';
+            }
+
+            const start = displayedCount;
+            const end = Math.min(start + ITEMS_PER_LOAD, allVideos.length);
+            displayedCount = end;
+
+            for (let i = start; i < end; i++) {
+                const v = allVideos[i];
+                const isSelected = selectedVideos.has(v.id);
+                const card = document.createElement('div');
+                card.className = 'video-card' + (isSelected ? ' selected' : '');
+                card.dataset.id = v.id;
+                card.dataset.index = i;
+
+                const checkClass = v.downloaded ? 'downloaded' : 'not-downloaded';
+
+                card.innerHTML =
+                    '<div class="video-thumb" onclick="toggleSelect(' + i + ', event)">' +
+                    (v.thumbnail ? '<img src="' + v.thumbnail + '" alt="thumbnail">' : '') +
+                    '<span class="duration">' + (v.duration || '') + '</span>' +
+                    '<div class="checkbox-overlay">' +
+                    '<div class="custom-checkbox ' + checkClass + (isSelected ? ' selected' : '') + '">' +
+                    '<span class="check-icon">✓</span>' +
+                    '<span class="dl-icon">↓</span>' +
+                    '</div></div>' +
+                    (v.downloaded ? '<div class="downloaded-badge">已下载</div>' : '') +
+                    '<button class="play-btn-overlay" onclick="event.stopPropagation(); previewVideo(' + i + ')">▶</button>' +
+                    '</div>' +
+                    '<div class="video-info">' +
+                    '<div class="video-title">' + escapeHtml(v.title) + '</div>' +
+                    '<div class="video-meta">' + (v.download_time || '') + '</div>' +
+                    '</div>';
+
+                grid.appendChild(card);
+            }
+
+            if (displayedCount < allVideos.length && !scrollListener) {
+                setupScrollListener();
+            }
+        }
+
+        function toggleSelect(index, event) {
+            if (event) event.stopPropagation();
+            const v = allVideos[index];
+            if (selectedVideos.has(v.id)) {
+                selectedVideos.delete(v.id);
+            } else {
+                selectedVideos.add(v.id);
+            }
+            renderVideos(false);
+            updateStats();
+        }
+
+        function selectAll() {
+            allVideos.forEach(v => selectedVideos.add(v.id));
+            renderVideos(false);
+            updateStats();
+        }
+
+        function selectAllUndownloaded() {
+            allVideos.forEach(v => { if (!v.downloaded) selectedVideos.add(v.id); });
+            renderVideos(false);
+            updateStats();
+        }
+
+        function deselectAll() {
+            selectedVideos.clear();
+            renderVideos(false);
+            updateStats();
+        }
+
+        function updateStats() {
+            const downloaded = allVideos.filter(v => v.downloaded).length;
+            document.getElementById('totalCount').textContent = allVideos.length;
+            document.getElementById('downloadedCount').textContent = downloaded;
+            document.getElementById('selectedCount').textContent = selectedVideos.size;
+            document.getElementById('downloadCount').textContent = selectedVideos.size;
+
+            const btn = document.getElementById('downloadBtn');
+            btn.disabled = selectedVideos.size === 0;
+        }
+
         async function downloadSelected() {
-            const toDownload = allVideos.filter(v => selectedVideos.has(v.id));
-            if (toDownload.length === 0) { showToast('请先选择要下载的视频', 'error'); return; }
+            if (selectedVideos.size === 0) {
+                showToast('请先选择要下载的视频', 'error');
+                return;
+            }
+
+            const videos = allVideos.filter(v => selectedVideos.has(v.id));
+
             try {
-                const resp = await fetch('/api/download', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ videos: toDownload }) });
+                const resp = await fetch('/api/download', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ videos: videos })
+                });
                 const data = await resp.json();
                 if (data.success) {
-                    showToast('已开始下载 ' + data.tasks.length + ' 个视频', 'success');
-                    activeTasks = {}; // 清空旧任务
+                    showToast(data.message, 'success');
+                    
+                    // 清空 activeTasks，重新使用后端返回的任务 ID
+                    activeTasks = {};
+                    data.tasks.forEach(t => {
+                        const v = videos.find(v => v.id === t.video_id);
+                        if (v) {
+                            activeTasks[t.task_id] = { video: v, status: 'pending', progress: 0, message: '准备中...' };
+                        }
+                    });
+                    
                     totalDownloadCount = data.tasks.length;
-                    data.tasks.forEach(t => { activeTasks[t.task_id] = { video_id: t.video_id, video_title: t.video_title, status: 'downloading', progress: 0 }; });
-                    showDownloadPanel(); startStatusPolling();
-                } else showToast(data.message || '下载失败', 'error');
+                    document.getElementById('downloadPanel').classList.add('active');
+                    updateDownloadPanel(); // 立即更新
+                    pollDownloadStatus(data.tasks.map(t => t.task_id));
+                } else {
+                    showToast(data.message || '下载失败', 'error');
+                }
             } catch (e) { showToast('下载请求失败: ' + e.message, 'error'); }
         }
 
-        async function pollStatus() {
-            const taskIds = Object.keys(activeTasks);
-            if (taskIds.length === 0) { stopStatusPolling(); return; }
-            try {
-                const resp = await fetch('/api/download_status', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ task_ids: taskIds }) });
-                const data = await resp.json();
-                if (data.success) {
-                    let allDone = true;
-                    for (const [tid, status] of Object.entries(data.statuses)) {
-                        if (activeTasks[tid]) {
-                            activeTasks[tid].status = status.status;
-                            activeTasks[tid].progress = status.progress;
-                            activeTasks[tid].message = status.message;
-                            if (status.status === 'completed') {
-                                const vid = activeTasks[tid].video_id;
-                                const video = allVideos.find(v => v.id === vid);
-                                if (video) { video.downloaded = true; video.download_time = new Date().toLocaleString('zh-CN'); video.local_path = status.video_path || video.local_path; }
+        function pollDownloadStatus(taskIds) {
+            if (statusInterval) clearInterval(statusInterval);
+            statusInterval = setInterval(async () => {
+                try {
+                    const resp = await fetch('/api/download_status', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ task_ids: taskIds })
+                    });
+                    const data = await resp.json();
+                    if (data.success) {
+                        let allDone = true;
+                        Object.keys(data.statuses).forEach(tid => {
+                            if (activeTasks[tid]) {
+                                activeTasks[tid].status = data.statuses[tid].status;
+                                activeTasks[tid].progress = data.statuses[tid].progress;
+                                activeTasks[tid].message = data.statuses[tid].message;
                             }
-                            if (status.status !== 'completed' && status.status !== 'error') allDone = false;
+                            if (data.statuses[tid].status !== 'completed' && data.statuses[tid].status !== 'error') {
+                                allDone = false;
+                            }
+                        });
+                        updateDownloadPanel();
+                        if (allDone) {
+                            clearInterval(statusInterval);
+                            selectedVideos.clear();
+                            renderVideos(false);
+                            updateStats();
                         }
                     }
-                    updateDownloadPanel(); renderVideos(true); updateStats();
-                    updateOverallProgress();
-                    if (allDone) {
-                        stopStatusPolling();
-                        const c = Object.values(activeTasks).filter(t => t.status === 'completed').length;
-                        const f = Object.values(activeTasks).filter(t => t.status === 'error').length;
-                        showToast(f === 0 ? '全部 ' + c + ' 个视频下载完成！' : '下载完成：' + c + ' 成功，' + f + ' 失败', f === 0 ? 'success' : 'error');
-                        // 下载完成后清空任务记录
-                        setTimeout(() => { activeTasks = {}; totalDownloadCount = 0; updateOverallProgress(); }, 1000);
-                    }
-                }
-            } catch (e) {}
+                } catch (e) { console.error('Status poll error:', e); }
+            }, 1000);
         }
 
-        function startStatusPolling() { if (statusInterval) clearInterval(statusInterval); statusInterval = setInterval(pollStatus, 2000); }
-        function stopStatusPolling() { if (statusInterval) { clearInterval(statusInterval); statusInterval = null; } }
+        function updateDownloadPanel() {
+            const body = document.getElementById('downloadPanelBody');
+            const overallFill = document.getElementById('overallFill');
+            const overallText = document.getElementById('overallText');
 
-        async function clearHistory() {
-            if (!confirm('确定要清除所有下载记录吗？（不会删除已下载的文件）')) return;
-            try {
-                const resp = await fetch('/api/clear_history', { method: 'POST' });
-                const data = await resp.json();
-                if (data.success) { allVideos.forEach(v => { v.downloaded = false; v.download_time = ''; }); renderVideos(true); updateStats(); showToast('下载记录已清除', 'success'); }
-            } catch (e) {}
+            const taskList = Object.keys(activeTasks);
+            let completed = 0;
+            let total = taskList.length;
+            
+            body.innerHTML = taskList.map(tid => {
+                const task = activeTasks[tid];
+                if (task.status === 'completed') completed++;
+
+                const prog = task.progress || 0;
+
+                let statusClass = '', fillClass = '';
+                if (task.status === 'completed') { statusClass = 'completed'; fillClass = 'completed'; }
+                if (task.status === 'error') { statusClass = 'error'; fillClass = 'error'; }
+
+                return '<div class="download-item">' +
+                    '<div class="download-item-title">' + escapeHtml(task.video.title) + '</div>' +
+                    '<div class="download-progress-bar"><div class="download-progress-fill ' + fillClass + '" style="width:' + prog + '%"></div></div>' +
+                    '<div class="download-item-status ' + statusClass + '">' + (task.message || '准备中...') + '</div>' +
+                    '</div>';
+            }).join('');
+
+            const percent = total > 0 ? (completed / total * 100) : 0;
+            overallFill.style.width = percent + '%';
+            overallText.textContent = completed + '/' + total;
+            if (completed === total && total > 0) {
+                overallFill.classList.add('all-done');
+            } else {
+                overallFill.classList.remove('all-done');
+            }
         }
 
-        async function openDownloads() {
-            try {
-                await fetch('/api/open_downloads', { method: 'POST' });
-            } catch (e) { showToast('无法打开目录', 'error'); }
+        function closeDownloadPanel() {
+            document.getElementById('downloadPanel').classList.remove('active');
+            if (statusInterval) { clearInterval(statusInterval); statusInterval = null; }
+            activeTasks = {};
         }
 
-        // ============ 设置 ============
+        async function previewVideo(index) {
+            const v = allVideos[index];
+            const video = document.getElementById('previewVideo');
+            const title = document.getElementById('previewTitle');
+            const overlay = document.getElementById('videoPreviewOverlay');
+
+            let url = v.play_url || v.download_url;
+            if (!url) { showToast('无法获取视频地址', 'error'); return; }
+
+            if (!url.startsWith('http')) {
+                url = '/api/play/' + v.id + '?url=' + encodeURIComponent(url);
+            }
+
+            video.src = url;
+            title.textContent = v.title;
+            overlay.classList.add('active');
+            video.play().catch(() => {});
+        }
+
+        function closePreview() {
+            const video = document.getElementById('previewVideo');
+            video.pause();
+            video.src = '';
+            document.getElementById('videoPreviewOverlay').classList.remove('active');
+        }
+
         async function openSettings() {
             try {
                 const resp = await fetch('/api/settings');
                 const data = await resp.json();
-                document.getElementById('currentDirDisplay').textContent = data.current_dir;
                 document.getElementById('dirInput').value = data.download_dir || '';
-                
-                // 显示/隐藏权限警告
-                const warning = document.getElementById('permissionWarning');
+                document.getElementById('currentDirDisplay').textContent = data.current_dir || '-';
+
+                const warn = document.getElementById('permissionWarning');
                 if (!data.has_write_permission) {
-                    warning.style.display = 'block';
+                    warn.style.display = 'block';
+                    warn.innerHTML = '⚠️ <strong>目录没有写入权限！</strong><br>' +
+                        '<span style="color: #aaa; font-size: 11px;">' + (data.permission_error || '未知错误') + '<br>' +
+                        '建议：使用程序目录或创建新文件夹（如 D:\\MyVideos）</span>';
                 } else {
-                    warning.style.display = 'none';
+                    warn.style.display = 'none';
                 }
-                
+
                 document.getElementById('settingsOverlay').classList.add('active');
-            } catch (e) { showToast('获取设置失败', 'error'); }
+            } catch (e) { showToast('加载设置失败', 'error'); }
         }
 
-        function closeSettings(event) {
-            if (event && event.target && event.target.id !== 'settingsOverlay') return;
-            document.getElementById('settingsOverlay').classList.remove('active');
-        }
-
-        async function saveSettings() {
-            const dir = document.getElementById('dirInput').value.trim();
-            if (!dir) { showToast('请输入下载目录路径', 'error'); return; }
-            try {
-                const resp = await fetch('/api/settings', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ download_dir: dir })
-                });
-                const data = await resp.json();
-                if (data.success) {
-                    document.getElementById('currentDirDisplay').textContent = data.current_dir;
-                    showToast('设置已保存，下载目录：' + data.current_dir, 'success');
-                    closeSettings();
-                } else {
-                    showToast(data.message || '保存失败', 'error');
-                }
-            } catch (e) { showToast('保存设置失败', 'error'); }
-        }
-
-        async function resetDownloadDir() {
-            try {
-                const resp = await fetch('/api/settings', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ download_dir: '' })
-                });
-                const data = await resp.json();
-                if (data.success) {
-                    document.getElementById('currentDirDisplay').textContent = data.current_dir;
-                    document.getElementById('dirInput').value = '';
-                    showToast('已恢复默认下载目录', 'success');
-                }
-            } catch (e) { showToast('操作失败', 'error'); }
+        function closeSettings(e) {
+            if (!e || e.target === document.getElementById('settingsOverlay')) {
+                document.getElementById('settingsOverlay').classList.remove('active');
+            }
         }
 
         async function browseFolder() {
@@ -937,162 +1039,72 @@
                 const data = await resp.json();
                 if (data.success && data.path) {
                     document.getElementById('dirInput').value = data.path;
-                    showToast('已选择目录: ' + data.path, 'success');
                 }
-            } catch (e) { showToast('无法打开文件夹选择器', 'error'); }
+            } catch (e) { showToast('选择目录失败', 'error'); }
         }
 
-        // ============ 渲染 ============
-        function renderVideos(reset = false) {
-            const grid = document.getElementById('videoGrid');
-            const empty = document.getElementById('emptyState');
-            const stats = document.getElementById('statsBar');
-            
-            if (allVideos.length === 0) { 
-                grid.innerHTML = ''; 
-                empty.style.display = 'block'; 
-                stats.classList.remove('active'); 
-                return; 
-            }
-            
-            empty.style.display = 'none'; 
-            stats.classList.add('active');
-            
-            if (reset) {
-                displayedCount = 0;
-                grid.innerHTML = '';
-            }
-            
-            const startIndex = displayedCount;
-            const endIndex = Math.min(startIndex + ITEMS_PER_LOAD, allVideos.length);
-            const newVideos = allVideos.slice(startIndex, endIndex);
-            
-            if (newVideos.length === 0) return;
-            
-            const newHtml = newVideos.map((video, localIndex) => {
-                const index = startIndex + localIndex;
-                const isSelected = selectedVideos.has(video.id);
-                const isDownloaded = video.downloaded;
-                const cc = isDownloaded ? 'downloaded' : 'not-downloaded';
-                const sc = isSelected ? 'selected' : '';
-                return '<div class="video-card ' + (isSelected ? 'selected' : '') + '" onclick="toggleVideo(\'' + video.id + '\')">' +
-                    '<div class="video-thumb">' +
-                    (video.thumbnail ? '<img src="' + video.thumbnail + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : '') +
-                    '<div class="checkbox-overlay"><div class="custom-checkbox ' + cc + ' ' + sc + '" onclick="event.stopPropagation(); toggleVideo(\'' + video.id + '\')"><span class="check-icon">✓</span><span class="dl-icon">✓</span></div></div>' +
-                    (isDownloaded ? '<div class="downloaded-badge">💾</div>' : '') +
-                    (video.duration ? '<div class="duration">' + video.duration + '</div>' : '') +
-                    '<div class="play-btn-overlay" onclick="event.stopPropagation(); playPreview(' + index + ')" title="播放预览">▶</div>' +
-                    '</div><div class="video-info"><div class="video-title">' + escapeHtml(video.title) + '</div>' +
-                    '<div class="video-meta">' + (isDownloaded && video.download_time ? '📥 ' + video.download_time : '#' + (index + 1)) + '</div></div></div>';
-            }).join('');
-            
-            if (reset) {
-                grid.innerHTML = newHtml;
-            } else {
-                grid.insertAdjacentHTML('beforeend', newHtml);
-            }
-            
-            displayedCount = endIndex;
-        }
-
-        function playPreview(index) {
-            const video = allVideos[index];
-            if (!video) return;
-            const previewEl = document.getElementById('previewVideo');
-            const titleEl = document.getElementById('previewTitle');
-            titleEl.textContent = video.title;
-            // 通过后端代理播放，解决抖音 Referer 限制
-            let videoUrl = video.play_url || video.download_url;
-            if (!videoUrl) {
-                if (video.url && video.url.includes('/video/')) {
-                    window.open(video.url, '_blank');
+        async function saveSettings() {
+            const dir = document.getElementById('dirInput').value.trim();
+            try {
+                const resp = await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ download_dir: dir })
+                });
+                const data = await resp.json();
+                if (data.success) {
+                    showToast('设置已保存', 'success');
+                    closeSettings();
                 } else {
-                    showToast('无法获取视频地址', 'error');
+                    showToast(data.message || '保存失败', 'error');
                 }
-                return;
-            }
-            // 使用后端代理地址
-            const proxyUrl = '/api/play/' + video.id + '?url=' + encodeURIComponent(videoUrl);
-            previewEl.src = proxyUrl;
-            document.getElementById('videoPreview').classList.add('active');
-            previewEl.play().catch((e) => {
-                console.log('播放失败:', e.message);
-                showToast('播放失败，已打开视频页面', '');
-                window.open(video.url, '_blank');
-                closePreview();
-            });
+            } catch (e) { showToast('保存失败', 'error'); }
         }
 
-        function closePreview(event) {
-            if (event && event.target && !event.target.closest('.video-preview-close') && event.target.id !== 'videoPreview') return;
-            const previewEl = document.getElementById('previewVideo');
-            previewEl.pause();
-            previewEl.src = '';
-            document.getElementById('videoPreview').classList.remove('active');
+        async function openDownloads() {
+            try {
+                await fetch('/api/open_downloads', { method: 'POST' });
+            } catch (e) { showToast('打开目录失败', 'error'); }
         }
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closePreview();
-        });
-
-        function toggleVideo(id) { if (selectedVideos.has(id)) selectedVideos.delete(id); else selectedVideos.add(id); renderVideos(true); updateStats(); }
-        function selectAll() { allVideos.forEach(v => selectedVideos.add(v.id)); renderVideos(true); updateStats(); }
-        function selectAllUndownloaded() { allVideos.forEach(v => { if (!v.downloaded) selectedVideos.add(v.id); }); renderVideos(true); updateStats(); }
-        function deselectAll() { selectedVideos.clear(); renderVideos(true); updateStats(); }
-
-        function updateStats() {
-            document.getElementById('totalCount').textContent = allVideos.length;
-            document.getElementById('downloadedCount').textContent = allVideos.filter(v => v.downloaded).length;
-            document.getElementById('selectedCount').textContent = selectedVideos.size;
-            document.getElementById('downloadCount').textContent = selectedVideos.size;
-            document.getElementById('downloadBtn').disabled = selectedVideos.size === 0;
+        async function clearHistory() {
+            if (!confirm('确定要清除所有历史记录吗？')) return;
+            try {
+                const resp = await fetch('/api/clear_history', { method: 'POST' });
+                const data = await resp.json();
+                if (data.success) {
+                    showToast('历史记录已清除', 'success');
+                    allVideos.forEach(v => v.downloaded = false);
+                    renderVideos(false);
+                    updateStats();
+                }
+            } catch (e) { showToast('清除失败', 'error'); }
         }
 
-        function updateDownloadPanel() {
-            const body = document.getElementById('downloadPanelBody');
-            const tasks = Object.entries(activeTasks);
-            if (tasks.length === 0) { body.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:20px;">暂无下载任务</p>'; return; }
-            body.innerHTML = tasks.map(([tid, task]) => {
-                const pc = task.status === 'completed' ? 'completed' : (task.status === 'error' ? 'error' : '');
-                const st = task.status === 'completed' ? '✅ 下载完成' : task.status === 'error' ? '❌ ' + (task.message || '下载失败') : task.message || '下载中... ' + task.progress.toFixed(1) + '%';
-                return '<div class="download-item"><div class="download-item-title">' + escapeHtml(task.video_title) + '</div><div class="download-progress-bar"><div class="download-progress-fill ' + pc + '" style="width: ' + task.progress + '%"></div></div><div class="download-item-status ' + task.status + '">' + st + '</div></div>';
-            }).join('');
+        function showLoading(text) {
+            document.getElementById('loadingText').textContent = text || '加载中...';
+            document.getElementById('loadingOverlay').classList.add('active');
         }
 
-        function showDownloadPanel() { document.getElementById('downloadPanel').classList.add('active'); updateDownloadPanel(); updateOverallProgress(); }
-        function closeDownloadPanel() { document.getElementById('downloadPanel').classList.remove('active'); }
-
-        function updateOverallProgress() {
-            const tasks = Object.values(activeTasks);
-            const total = tasks.length;
-            if (total === 0) {
-                const fill = document.getElementById('overallFill');
-                const text = document.getElementById('overallText');
-                if (fill) fill.style.width = '0%';
-                if (text) text.textContent = '0/0';
-                return;
-            }
-            const completed = tasks.filter(t => t.status === 'completed').length;
-            const errored = tasks.filter(t => t.status === 'error').length;
-            const doneCount = completed + errored;
-            const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
-
-            const fill = document.getElementById('overallFill');
-            const text = document.getElementById('overallText');
-            fill.style.width = pct + '%';
-            fill.className = 'download-overall-fill' + (doneCount === total && total > 0 ? ' all-done' : '');
-            text.textContent = completed + '/' + total + (errored > 0 ? '  (' + errored + ' 失败)' : '');
-        }
-        function showLoading(t) { document.getElementById('loadingText').textContent = t || '加载中...'; document.getElementById('loadingOverlay').classList.add('active'); }
-        function hideLoading() { document.getElementById('loadingOverlay').classList.remove('active'); }
-
-        function showToast(msg, type) {
-            const c = document.getElementById('toastContainer');
-            const t = document.createElement('div'); t.className = 'toast ' + (type || ''); t.textContent = msg; c.appendChild(t);
-            setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(100px)'; t.style.transition = 'all 0.3s'; setTimeout(() => t.remove(), 300); }, 3000);
+        function hideLoading() {
+            document.getElementById('loadingOverlay').classList.remove('active');
         }
 
-        function escapeHtml(text) { const d = document.createElement('div'); d.textContent = text; return d.innerHTML; }
+        function showToast(message, type) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast ' + (type || 'info');
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
     </script>
 </body>
 </html>
